@@ -10,5 +10,5 @@ root.render(
     <ContactsProvider>
       <App />
     </ContactsProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

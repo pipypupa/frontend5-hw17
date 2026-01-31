@@ -5,15 +5,15 @@ import { useContacts } from "../hooks/useContacts";
 const ContactForm = () => {
   const nameRef = useRef();
   const numberRef = useRef();
-  const { contacts, dispatch } = useContacts();
+  const { contacts, addContact } = useContacts();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const name = nameRef.current.value;
-    const number = numberRef.current.value;
+    const name = nameRef.current.value.trim();
+    const number = numberRef.current.value.trim();
 
     const exists = contacts.some(
-      (contact) => contact.name.toLowerCase() === name.toLowerCase(),
+      (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
 
     if (exists) {
@@ -21,11 +21,7 @@ const ContactForm = () => {
       return;
     }
 
-    dispatch({
-      type: "ADD",
-      payload: { id: nanoid(), name, number },
-    });
-
+    addContact({ id: nanoid(), name, number });
     e.target.reset();
     nameRef.current.focus();
   };
