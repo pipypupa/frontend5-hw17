@@ -1,8 +1,16 @@
-const ContactItem = ({ contact, onDelete }) => {
+import { useContacts } from "../hooks/useContacts";
+
+const ContactItem = ({ id, name, number }) => {
+  const { dispatch } = useContacts();
+
   return (
     <li>
-      {contact.name}: {contact.number}
-      <button onClick={() => onDelete(contact.id)}>Delete</button>
+      <span>
+        {name}: {number}
+      </span>
+      <button onClick={() => dispatch({ type: "DELETE", payload: id })}>
+        Delete
+      </button>
     </li>
   );
 };

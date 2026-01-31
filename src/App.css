@@ -9,9 +9,9 @@ body {
   background-color: #f5f7fa;
 }
 
-div {
+.container {
   max-width: 420px;
-  margin: auto;
+  margin: 40px auto;
   padding: 20px;
   background-color: white;
   border-radius: 4px;

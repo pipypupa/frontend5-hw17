@@ -1,46 +1,45 @@
-import { useState } from "react";
+import { useRef } from "react";
+import { nanoid } from "nanoid";
+import { useContacts } from "../hooks/useContacts";
 
-const ContactForm = ({ onAddContact }) => {
-  const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
+const ContactForm = () => {
+  const nameRef = useRef();
+  const numberRef = useRef();
+  const { contacts, dispatch } = useContacts();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const name = nameRef.current.value;
+    const number = numberRef.current.value;
 
-    onAddContact({ name, number });
+    const exists = contacts.some(
+      (contact) => contact.name.toLowerCase() === name.toLowerCase(),
+    );
 
-    setName("");
-    setNumber("");
+    if (exists) {
+      alert(`${name} already exists`);
+      return;
+    }
+
+    dispatch({
+      type: "ADD",
+      payload: { id: nanoid(), name, number },
+    });
+
+    e.target.reset();
+    nameRef.current.focus();
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
         Name
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces."
-          required
-        />
+        <input ref={nameRef} required />
       </label>
-
       <label>
         Number
-        <input
-          type="tel"
-          name="number"
-          value={number}
-          onChange={(e) => setNumber(e.target.value)}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-        />
+        <input ref={numberRef} required />
       </label>
-
       <button type="submit">Add contact</button>
     </form>
   );
